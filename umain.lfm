@@ -1,0 +1,135 @@
+object Form1: TForm1
+  Left = 423
+  Height = 471
+  Top = 178
+  Width = 655
+  Caption = 'Form1'
+  ClientHeight = 471
+  ClientWidth = 655
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  LCLVersion = '1.5'
+  object Panel1: TPanel
+    Left = 8
+    Height = 104
+    Top = 64
+    Width = 120
+    ClientHeight = 104
+    ClientWidth = 120
+    TabOrder = 0
+    object SpinEdit1: TSpinEdit
+      Left = 67
+      Height = 25
+      Top = 2
+      Width = 50
+      MaxValue = 255
+      TabOrder = 0
+      Value = 38
+    end
+  end
+  object Button1: TButton
+    Left = 432
+    Height = 25
+    Top = 240
+    Width = 75
+    Caption = 'Button1'
+    OnClick = Button1Click
+    TabOrder = 1
+  end
+  object Edit1: TEdit
+    Left = 152
+    Height = 25
+    Top = 240
+    Width = 272
+    TabOrder = 2
+  end
+  object seTimer1: TFloatSpinEdit
+    Left = 152
+    Height = 25
+    Top = 287
+    Width = 50
+    Increment = 1
+    MaxValue = 100
+    MinValue = 0
+    TabOrder = 3
+    Value = 5
+  end
+  object Label1: TLabel
+    Left = 206
+    Height = 15
+    Top = 288
+    Width = 23
+    Caption = 'min'
+    ParentColor = False
+  end
+  object lTimer1: TLabel
+    Left = 254
+    Height = 15
+    Top = 288
+    Width = 36
+    Caption = '00:00'
+    ParentColor = False
+  end
+  object Button2: TButton
+    Left = 349
+    Height = 25
+    Top = 287
+    Width = 75
+    Caption = 'Start'
+    OnClick = Button2Click
+    TabOrder = 4
+  end
+  object cbValue: TComboBox
+    Left = 8
+    Height = 27
+    Top = 24
+    Width = 320
+    ItemHeight = 0
+    Items.Strings = (
+      'PH'
+      'KH'
+      'PO4'
+      'NO3'
+      'NO2'
+    )
+    TabOrder = 5
+    Text = 'cbValue'
+  end
+  object Label2: TLabel
+    Left = 8
+    Height = 15
+    Top = 8
+    Width = 56
+    Caption = 'Messwert'
+    ParentColor = False
+  end
+  object Label3: TLabel
+    Left = 352
+    Height = 15
+    Top = 8
+    Width = 50
+    Caption = 'Reagenz'
+    ParentColor = False
+  end
+  object cbChem: TComboBox
+    Left = 352
+    Height = 27
+    Top = 24
+    Width = 288
+    ItemHeight = 0
+    TabOrder = 6
+    Text = 'cbChem'
+  end
+  object TimerRef: TTimer
+    Interval = 300
+    OnTimer = TimerRefTimer
+    left = 16
+    top = 192
+  end
+  object Timer1: TTimer
+    Enabled = False
+    OnTimer = Timer1Timer
+    left = 224
+    top = 288
+  end
+end
