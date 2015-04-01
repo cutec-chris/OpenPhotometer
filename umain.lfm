@@ -1,10 +1,10 @@
 object Form1: TForm1
-  Left = 423
-  Height = 471
-  Top = 178
+  Left = 428
+  Height = 515
+  Top = 182
   Width = 655
   Caption = 'Form1'
-  ClientHeight = 471
+  ClientHeight = 515
   ClientWidth = 655
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -24,29 +24,29 @@ object Form1: TForm1
       Width = 50
       MaxValue = 255
       TabOrder = 0
-      Value = 38
+      Value = 100
     end
   end
   object Button1: TButton
-    Left = 432
+    Left = 568
     Height = 25
-    Top = 240
+    Top = 224
     Width = 75
     Caption = 'Button1'
     OnClick = Button1Click
     TabOrder = 1
   end
   object Edit1: TEdit
-    Left = 152
+    Left = 288
     Height = 25
-    Top = 240
+    Top = 224
     Width = 272
     TabOrder = 2
   end
   object seTimer1: TFloatSpinEdit
-    Left = 152
+    Left = 288
     Height = 25
-    Top = 287
+    Top = 271
     Width = 50
     Increment = 1
     MaxValue = 100
@@ -55,25 +55,25 @@ object Form1: TForm1
     Value = 5
   end
   object Label1: TLabel
-    Left = 206
+    Left = 342
     Height = 15
-    Top = 288
+    Top = 272
     Width = 23
     Caption = 'min'
     ParentColor = False
   end
   object lTimer1: TLabel
-    Left = 254
+    Left = 390
     Height = 15
-    Top = 288
+    Top = 272
     Width = 36
     Caption = '00:00'
     ParentColor = False
   end
   object Button2: TButton
-    Left = 349
+    Left = 485
     Height = 25
-    Top = 287
+    Top = 271
     Width = 75
     Caption = 'Start'
     OnClick = Button2Click
@@ -83,7 +83,7 @@ object Form1: TForm1
     Left = 8
     Height = 27
     Top = 24
-    Width = 320
+    Width = 240
     ItemHeight = 0
     Items.Strings = (
       'PH'
@@ -104,7 +104,7 @@ object Form1: TForm1
     ParentColor = False
   end
   object Label3: TLabel
-    Left = 352
+    Left = 264
     Height = 15
     Top = 8
     Width = 50
@@ -112,24 +112,128 @@ object Form1: TForm1
     ParentColor = False
   end
   object cbChem: TComboBox
-    Left = 352
+    Left = 264
     Height = 27
     Top = 24
-    Width = 288
+    Width = 240
     ItemHeight = 0
     TabOrder = 6
     Text = 'cbChem'
+  end
+  object tbR: TTrackBar
+    Left = 8
+    Height = 240
+    Top = 240
+    Width = 64
+    Max = 65535
+    Orientation = trVertical
+    Position = 4004
+    ScalePos = trBottom
+    Anchors = [akTop, akLeft, akBottom]
+    TabOrder = 7
+  end
+  object eRMax: TEdit
+    Left = 8
+    Height = 25
+    Top = 208
+    Width = 64
+    MaxLength = 10
+    OnChange = eRMaxChange
+    TabOrder = 8
+    Text = ' '
+  end
+  object eRMin: TEdit
+    Left = 8
+    Height = 25
+    Top = 485
+    Width = 64
+    Anchors = [akLeft, akBottom]
+    MaxLength = 10
+    OnChange = eRMinChange
+    TabOrder = 9
+    Text = ' '
+  end
+  object Button3: TButton
+    Left = 72
+    Height = 25
+    Top = 208
+    Width = 56
+    Caption = '<<'
+    OnClick = Button3Click
+    TabOrder = 10
+  end
+  object Button4: TButton
+    Left = 72
+    Height = 25
+    Top = 485
+    Width = 56
+    Anchors = [akLeft, akBottom]
+    Caption = '<<'
+    OnClick = Button4Click
+    TabOrder = 11
+  end
+  object cbColor: TComboBox
+    Left = 8
+    Height = 27
+    Top = 176
+    Width = 120
+    ItemHeight = 0
+    ItemIndex = 1
+    Items.Strings = (
+      'rot'
+      'grün'
+      'blau'
+      'alles'
+    )
+    TabOrder = 12
+    Text = 'grün'
+  end
+  object eMin: TEdit
+    Left = 72
+    Height = 25
+    Top = 461
+    Width = 56
+    Anchors = [akLeft, akBottom]
+    TabOrder = 13
+    Text = 'eMin'
+  end
+  object eMax: TEdit
+    Left = 72
+    Height = 25
+    Top = 232
+    Width = 56
+    TabOrder = 14
+    Text = 'eMax'
+  end
+  object Button5: TButton
+    Left = 512
+    Height = 25
+    Top = 24
+    Width = 96
+    Caption = 'Speichern'
+    OnClick = Button5Click
+    TabOrder = 15
+  end
+  object eValue: TEdit
+    Left = 72
+    Height = 25
+    Top = 344
+    Width = 56
+    MaxLength = 10
+    OnChange = eValueChange
+    TabOrder = 16
+    Text = ' '
   end
   object TimerRef: TTimer
     Interval = 300
     OnTimer = TimerRefTimer
     left = 16
-    top = 192
+    top = 128
   end
   object Timer1: TTimer
     Enabled = False
     OnTimer = Timer1Timer
-    left = 224
-    top = 288
+    left = 360
+    top = 272
   end
 end
