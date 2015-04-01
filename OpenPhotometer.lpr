@@ -7,7 +7,7 @@ uses
   cthreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, uMain, IPConnection, BrickletColor
+  Forms, lazcontrols, uMain, IPConnection, BrickletColor
   { you can add units after this };
 
 {$R *.res}

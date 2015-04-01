@@ -5,8 +5,8 @@ unit uMain;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  StdCtrls, Spin, ComCtrls, IPConnection, BrickletColor,IniFiles;
+  Classes, SysUtils, FileUtil, DividerBevel, Forms, Controls, Graphics, Dialogs,
+  ExtCtrls, StdCtrls, Spin, ComCtrls, IPConnection, BrickletColor, IniFiles;
 
 const
   HOST = 'localhost';
@@ -22,11 +22,14 @@ type
     Button2: TButton;
     Button3: TButton;
     Button4: TButton;
-    Button5: TButton;
+    bSave: TButton;
     cbValue: TComboBox;
     cbChem: TComboBox;
     cbColor: TComboBox;
-    Edit1: TEdit;
+    DividerBevel1: TDividerBevel;
+    DividerBevel2: TDividerBevel;
+    DividerBevel3: TDividerBevel;
+    eRange: TEdit;
     eMax: TEdit;
     eMin: TEdit;
     eRMax: TEdit;
@@ -34,6 +37,8 @@ type
     eRMin: TEdit;
     Label2: TLabel;
     Label3: TLabel;
+    mUsage: TMemo;
+    mRanges: TMemo;
     seTimer1: TFloatSpinEdit;
     Label1: TLabel;
     lTimer1: TLabel;
@@ -46,7 +51,9 @@ type
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
-    procedure Button5Click(Sender: TObject);
+    procedure bSaveClick(Sender: TObject);
+    procedure cbChemSelect(Sender: TObject);
+    procedure cbValueSelect(Sender: TObject);
     procedure eRMaxChange(Sender: TObject);
     procedure eRMinChange(Sender: TObject);
     procedure eValueChange(Sender: TObject);
@@ -97,7 +104,7 @@ begin
   if FileExistsUTF8('ranges.txt') then
     sl.LoadFromFile('ranges.txt');
   ColorBricklet.GetColor(r,g,b,c);
-  sl.Add(Edit1.Text+':'+IntToStr(r)+','+IntToStr(g)+','+IntToStr(b)+','+IntToStr(c));
+  sl.Add(eRange.Text+':'+IntToStr(r)+','+IntToStr(g)+','+IntToStr(b)+','+IntToStr(c));
   sl.SaveToFile('ranges.txt');
   sl.Free;
 end;
@@ -131,9 +138,10 @@ begin
   end;
 end;
 
-procedure TForm1.Button5Click(Sender: TObject);
+procedure TForm1.bSaveClick(Sender: TObject);
 var
   ini: TIniFile;
+  ss: TStringStream;
 begin
   ini := TIniFile.Create(cbValue.Text+'.'+cbChem.Text+'.ini');
   ini.WriteString('Value','Min',eRMin.Text);
@@ -141,8 +149,65 @@ begin
   ini.WriteString('Value','Color',cbColor.Text);
   ini.WriteString('Value','RealMin',eMin.Text);
   ini.WriteString('Value','RealMax',eMax.Text);
+  ss := TStringStream.Create(mUsage.Text);
+  ini.WriteBinaryStream('Usage','Text',ss);
+  ss.Free;
+  ss := TStringStream.Create(mRanges.Text);
+  ini.WriteBinaryStream('Ranges','Text',ss);
+  ss.Free;
   ini.UpdateFile;
   ini.Free;
+end;
+
+procedure TForm1.cbChemSelect(Sender: TObject);
+var
+  ini: TIniFile;
+  ss: TStringStream;
+begin
+  ini := TIniFile.Create(cbValue.Text+'.'+cbChem.Text+'.ini');
+  eRMin.Text:=ini.ReadString('Value','Min',eRMin.Text);
+  eRMax.Text:=ini.ReadString('Value','Max',eRMax.Text);
+  cbColor.Text:=ini.ReadString('Value','Color',cbColor.Text);
+  eMin.Text:=ini.ReadString('Value','RealMin',eMin.Text);
+  eMax.Text:=ini.ReadString('Value','RealMax',eMax.Text);
+  ss := TStringStream.Create('');
+  ini.ReadBinaryStream('Usage','Text',ss);
+  mUsage.Text:=ss.DataString;
+  ss.Free;
+  ss := TStringStream.Create('');
+  ini.ReadBinaryStream('Ranges','Text',ss);
+  mRanges.Text:=ss.DataString;
+  ss.Free;
+  ini.Free;
+end;
+
+procedure TForm1.cbValueSelect(Sender: TObject);
+var
+  Info: TSearchRec;
+  tmp: String;
+begin
+  cbChem.Clear;
+  If FindFirst ('*.ini',faAnyFile,Info)=0 then
+    begin
+      repeat
+        With Info do
+          If (Attr and faDirectory) <> faDirectory then
+            begin
+              if copy(Name,0,length(cbValue.Text))=cbValue.Text then
+                begin
+                  tmp := Name;
+                  tmp := copy(tmp,length(cbValue.Text)+2,length(tmp));
+                  tmp := copy(tmp,0,pos('.',tmp)-1);
+                  cbChem.items.Add(tmp);
+                end;
+            end;
+      until FindNext(info)<>0;
+    end;
+  if cbChem.Items.Count=1 then
+    begin
+      cbChem.ItemIndex:=0;
+      cbChemSelect(cbChem);
+    end;
 end;
 
 procedure TForm1.eRMaxChange(Sender: TObject);
@@ -180,7 +245,11 @@ var
   c: word;
 begin
   if eValue.text<>'' then exit;
-  ColorBricklet.GetColor(r,g,b,c);
+  if not ipcon.IsConnected then exit;
+  try
+    ColorBricklet.GetColor(r,g,b,c);
+  except
+  end;
   Panel1.Color:=RGBToColor(round((r/SpinEdit1.Value)),round((g/SpinEdit1.Value)),round((b/SpinEdit1.Value)));
   case cbColor.Text of
   'rot':tbR.Position:=r;

@@ -1,19 +1,20 @@
 object Form1: TForm1
   Left = 428
-  Height = 515
-  Top = 182
-  Width = 655
+  Height = 518
+  Top = 179
+  Width = 650
   Caption = 'Form1'
-  ClientHeight = 515
-  ClientWidth = 655
+  ClientHeight = 518
+  ClientWidth = 650
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   LCLVersion = '1.5'
   object Panel1: TPanel
-    Left = 8
+    Left = 523
     Height = 104
     Top = 64
     Width = 120
+    Anchors = [akTop, akRight]
     ClientHeight = 104
     ClientWidth = 120
     TabOrder = 0
@@ -28,26 +29,29 @@ object Form1: TForm1
     end
   end
   object Button1: TButton
-    Left = 568
+    Left = 288
     Height = 25
-    Top = 224
-    Width = 75
-    Caption = 'Button1'
+    Top = 475
+    Width = 210
+    Anchors = [akLeft, akRight, akBottom]
+    Caption = 'in ranges.txt speichern'
     OnClick = Button1Click
     TabOrder = 1
   end
-  object Edit1: TEdit
-    Left = 288
+  object eRange: TEdit
+    Left = 8
     Height = 25
-    Top = 224
-    Width = 272
+    Top = 475
+    Width = 274
+    Anchors = [akLeft, akRight, akBottom]
     TabOrder = 2
   end
   object seTimer1: TFloatSpinEdit
-    Left = 288
+    Left = 264
     Height = 25
-    Top = 271
+    Top = 315
     Width = 50
+    Anchors = [akLeft, akBottom]
     Increment = 1
     MaxValue = 100
     MinValue = 0
@@ -55,26 +59,31 @@ object Form1: TForm1
     Value = 5
   end
   object Label1: TLabel
-    Left = 342
+    Left = 320
     Height = 15
-    Top = 272
+    Top = 319
     Width = 23
+    Anchors = [akLeft, akBottom]
     Caption = 'min'
     ParentColor = False
   end
   object lTimer1: TLabel
-    Left = 390
-    Height = 15
-    Top = 272
-    Width = 36
+    Left = 160
+    Height = 29
+    Top = 318
+    Width = 68
+    Anchors = [akLeft, akBottom]
     Caption = '00:00'
+    Font.Height = -24
     ParentColor = False
+    ParentFont = False
   end
   object Button2: TButton
-    Left = 485
-    Height = 25
-    Top = 271
-    Width = 75
+    Left = 8
+    Height = 48
+    Top = 307
+    Width = 128
+    Anchors = [akLeft, akBottom]
     Caption = 'Start'
     OnClick = Button2Click
     TabOrder = 4
@@ -92,8 +101,8 @@ object Form1: TForm1
       'NO3'
       'NO2'
     )
+    OnSelect = cbValueSelect
     TabOrder = 5
-    Text = 'cbValue'
   end
   object Label2: TLabel
     Left = 8
@@ -115,13 +124,14 @@ object Form1: TForm1
     Left = 264
     Height = 27
     Top = 24
-    Width = 240
+    Width = 275
+    Anchors = [akTop, akLeft, akRight]
     ItemHeight = 0
+    OnSelect = cbChemSelect
     TabOrder = 6
-    Text = 'cbChem'
   end
   object tbR: TTrackBar
-    Left = 8
+    Left = 523
     Height = 240
     Top = 240
     Width = 64
@@ -129,54 +139,57 @@ object Form1: TForm1
     Orientation = trVertical
     Position = 4004
     ScalePos = trBottom
-    Anchors = [akTop, akLeft, akBottom]
+    Anchors = [akTop, akRight]
     TabOrder = 7
   end
   object eRMax: TEdit
-    Left = 8
+    Left = 523
     Height = 25
     Top = 208
     Width = 64
+    Anchors = [akTop, akRight]
     MaxLength = 10
     OnChange = eRMaxChange
     TabOrder = 8
     Text = ' '
   end
   object eRMin: TEdit
-    Left = 8
+    Left = 523
     Height = 25
     Top = 485
     Width = 64
-    Anchors = [akLeft, akBottom]
+    Anchors = [akTop, akRight]
     MaxLength = 10
     OnChange = eRMinChange
     TabOrder = 9
     Text = ' '
   end
   object Button3: TButton
-    Left = 72
+    Left = 587
     Height = 25
     Top = 208
     Width = 56
+    Anchors = [akTop, akRight]
     Caption = '<<'
     OnClick = Button3Click
     TabOrder = 10
   end
   object Button4: TButton
-    Left = 72
+    Left = 587
     Height = 25
     Top = 485
     Width = 56
-    Anchors = [akLeft, akBottom]
+    Anchors = [akTop, akRight]
     Caption = '<<'
     OnClick = Button4Click
     TabOrder = 11
   end
   object cbColor: TComboBox
-    Left = 8
+    Left = 523
     Height = 27
     Top = 176
     Width = 120
+    Anchors = [akTop, akRight]
     ItemHeight = 0
     ItemIndex = 1
     Items.Strings = (
@@ -189,51 +202,103 @@ object Form1: TForm1
     Text = 'grün'
   end
   object eMin: TEdit
-    Left = 72
+    Left = 587
     Height = 25
     Top = 461
     Width = 56
-    Anchors = [akLeft, akBottom]
+    Anchors = [akTop, akRight]
     TabOrder = 13
     Text = 'eMin'
   end
   object eMax: TEdit
-    Left = 72
+    Left = 587
     Height = 25
     Top = 232
     Width = 56
+    Anchors = [akTop, akRight]
     TabOrder = 14
     Text = 'eMax'
   end
-  object Button5: TButton
-    Left = 512
+  object bSave: TButton
+    Left = 547
     Height = 25
     Top = 24
     Width = 96
+    Anchors = [akTop, akRight]
     Caption = 'Speichern'
-    OnClick = Button5Click
+    OnClick = bSaveClick
     TabOrder = 15
   end
   object eValue: TEdit
-    Left = 72
+    Left = 587
     Height = 25
     Top = 344
     Width = 56
+    Anchors = [akTop, akRight]
     MaxLength = 10
     OnChange = eValueChange
     TabOrder = 16
     Text = ' '
   end
+  object DividerBevel1: TDividerBevel
+    Left = 8
+    Height = 15
+    Top = 80
+    Width = 498
+    Caption = 'Anweisung'
+    Anchors = [akLeft, akRight, akBottom]
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object mUsage: TMemo
+    Left = 8
+    Height = 165
+    Top = 104
+    Width = 490
+    Anchors = [akLeft, akRight, akBottom]
+    Font.Height = -15
+    ParentFont = False
+    TabOrder = 17
+  end
+  object DividerBevel2: TDividerBevel
+    Left = 8
+    Height = 15
+    Top = 283
+    Width = 498
+    Caption = 'Messung'
+    Anchors = [akLeft, akRight, akBottom]
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object mRanges: TMemo
+    Left = 8
+    Height = 74
+    Top = 387
+    Width = 490
+    Anchors = [akLeft, akRight, akBottom]
+    ParentFont = False
+    TabOrder = 18
+  end
+  object DividerBevel3: TDividerBevel
+    Left = 8
+    Height = 15
+    Top = 363
+    Width = 498
+    Caption = 'Abgleichwerte'
+    Anchors = [akLeft, akRight, akBottom]
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
   object TimerRef: TTimer
     Interval = 300
     OnTimer = TimerRefTimer
-    left = 16
+    left = 536
     top = 128
   end
   object Timer1: TTimer
     Enabled = False
     OnTimer = Timer1Timer
-    left = 360
-    top = 272
+    left = 232
+    top = 329
   end
 end
