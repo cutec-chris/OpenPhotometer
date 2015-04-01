@@ -1,16 +1,16 @@
-object Form1: TForm1
+object fPhotometer: TfPhotometer
   Left = 428
   Height = 518
   Top = 179
-  Width = 650
-  Caption = 'Form1'
+  Width = 659
+  Caption = 'OpenPhotometer'
   ClientHeight = 518
-  ClientWidth = 650
+  ClientWidth = 659
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   LCLVersion = '1.5'
   object Panel1: TPanel
-    Left = 523
+    Left = 532
     Height = 104
     Top = 64
     Width = 120
@@ -32,8 +32,8 @@ object Form1: TForm1
     Left = 288
     Height = 25
     Top = 475
-    Width = 210
-    Anchors = [akLeft, akRight, akBottom]
+    Width = 219
+    Anchors = [akRight, akBottom]
     Caption = 'in ranges.txt speichern'
     OnClick = Button1Click
     TabOrder = 1
@@ -42,14 +42,14 @@ object Form1: TForm1
     Left = 8
     Height = 25
     Top = 475
-    Width = 274
+    Width = 283
     Anchors = [akLeft, akRight, akBottom]
     TabOrder = 2
   end
   object seTimer1: TFloatSpinEdit
-    Left = 264
+    Left = 248
     Height = 25
-    Top = 315
+    Top = 307
     Width = 50
     Anchors = [akLeft, akBottom]
     Increment = 1
@@ -59,18 +59,18 @@ object Form1: TForm1
     Value = 5
   end
   object Label1: TLabel
-    Left = 320
+    Left = 304
     Height = 15
-    Top = 319
+    Top = 311
     Width = 23
     Anchors = [akLeft, akBottom]
     Caption = 'min'
     ParentColor = False
   end
   object lTimer1: TLabel
-    Left = 160
+    Left = 144
     Height = 29
-    Top = 318
+    Top = 307
     Width = 68
     Anchors = [akLeft, akBottom]
     Caption = '00:00'
@@ -97,9 +97,12 @@ object Form1: TForm1
     Items.Strings = (
       'PH'
       'KH'
+      'CA'
       'PO4'
       'NO3'
       'NO2'
+      'NH3,4'
+      'CU'
     )
     OnSelect = cbValueSelect
     TabOrder = 5
@@ -124,14 +127,14 @@ object Form1: TForm1
     Left = 264
     Height = 27
     Top = 24
-    Width = 275
+    Width = 284
     Anchors = [akTop, akLeft, akRight]
     ItemHeight = 0
     OnSelect = cbChemSelect
     TabOrder = 6
   end
   object tbR: TTrackBar
-    Left = 523
+    Left = 532
     Height = 240
     Top = 240
     Width = 64
@@ -143,7 +146,7 @@ object Form1: TForm1
     TabOrder = 7
   end
   object eRMax: TEdit
-    Left = 523
+    Left = 532
     Height = 25
     Top = 208
     Width = 64
@@ -154,7 +157,7 @@ object Form1: TForm1
     Text = ' '
   end
   object eRMin: TEdit
-    Left = 523
+    Left = 532
     Height = 25
     Top = 485
     Width = 64
@@ -165,7 +168,7 @@ object Form1: TForm1
     Text = ' '
   end
   object Button3: TButton
-    Left = 587
+    Left = 596
     Height = 25
     Top = 208
     Width = 56
@@ -175,7 +178,7 @@ object Form1: TForm1
     TabOrder = 10
   end
   object Button4: TButton
-    Left = 587
+    Left = 596
     Height = 25
     Top = 485
     Width = 56
@@ -185,7 +188,7 @@ object Form1: TForm1
     TabOrder = 11
   end
   object cbColor: TComboBox
-    Left = 523
+    Left = 532
     Height = 27
     Top = 176
     Width = 120
@@ -202,7 +205,7 @@ object Form1: TForm1
     Text = 'grün'
   end
   object eMin: TEdit
-    Left = 587
+    Left = 596
     Height = 25
     Top = 461
     Width = 56
@@ -211,7 +214,7 @@ object Form1: TForm1
     Text = 'eMin'
   end
   object eMax: TEdit
-    Left = 587
+    Left = 596
     Height = 25
     Top = 232
     Width = 56
@@ -220,7 +223,7 @@ object Form1: TForm1
     Text = 'eMax'
   end
   object bSave: TButton
-    Left = 547
+    Left = 556
     Height = 25
     Top = 24
     Width = 96
@@ -230,7 +233,7 @@ object Form1: TForm1
     TabOrder = 15
   end
   object eValue: TEdit
-    Left = 587
+    Left = 596
     Height = 25
     Top = 344
     Width = 56
@@ -244,7 +247,7 @@ object Form1: TForm1
     Left = 8
     Height = 15
     Top = 80
-    Width = 498
+    Width = 507
     Caption = 'Anweisung'
     Anchors = [akLeft, akRight, akBottom]
     Font.Style = [fsBold]
@@ -254,7 +257,7 @@ object Form1: TForm1
     Left = 8
     Height = 165
     Top = 104
-    Width = 490
+    Width = 499
     Anchors = [akLeft, akRight, akBottom]
     Font.Height = -15
     ParentFont = False
@@ -264,7 +267,7 @@ object Form1: TForm1
     Left = 8
     Height = 15
     Top = 283
-    Width = 498
+    Width = 328
     Caption = 'Messung'
     Anchors = [akLeft, akRight, akBottom]
     Font.Style = [fsBold]
@@ -274,7 +277,7 @@ object Form1: TForm1
     Left = 8
     Height = 74
     Top = 387
-    Width = 490
+    Width = 499
     Anchors = [akLeft, akRight, akBottom]
     ParentFont = False
     TabOrder = 18
@@ -283,11 +286,41 @@ object Form1: TForm1
     Left = 8
     Height = 15
     Top = 363
-    Width = 498
+    Width = 507
     Caption = 'Abgleichwerte'
     Anchors = [akLeft, akRight, akBottom]
     Font.Style = [fsBold]
     ParentFont = False
+  end
+  object DividerBevel4: TDividerBevel
+    Left = 345
+    Height = 15
+    Top = 283
+    Width = 170
+    Caption = 'Wert'
+    Anchors = [akTop, akRight]
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object lValue: TLabel
+    Left = 506
+    Height = 1
+    Top = 343
+    Width = 1
+    Anchors = [akRight, akBottom]
+    Font.Height = -32
+    ParentColor = False
+    ParentFont = False
+  end
+  object Button5: TButton
+    Left = 345
+    Height = 37
+    Top = 307
+    Width = 75
+    Anchors = [akTop, akRight]
+    Caption = 'messen'
+    OnClick = Button5Click
+    TabOrder = 19
   end
   object TimerRef: TTimer
     Interval = 300
@@ -298,7 +331,7 @@ object Form1: TForm1
   object Timer1: TTimer
     Enabled = False
     OnTimer = Timer1Timer
-    left = 232
-    top = 329
+    left = 216
+    top = 321
   end
 end

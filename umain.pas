@@ -15,20 +15,22 @@ const
 
 type
 
-  { TForm1 }
+  { TfPhotometer }
 
-  TForm1 = class(TForm)
+  TfPhotometer = class(TForm)
     Button1: TButton;
     Button2: TButton;
     Button3: TButton;
     Button4: TButton;
     bSave: TButton;
+    Button5: TButton;
     cbValue: TComboBox;
     cbChem: TComboBox;
     cbColor: TComboBox;
     DividerBevel1: TDividerBevel;
     DividerBevel2: TDividerBevel;
     DividerBevel3: TDividerBevel;
+    DividerBevel4: TDividerBevel;
     eRange: TEdit;
     eMax: TEdit;
     eMin: TEdit;
@@ -37,6 +39,7 @@ type
     eRMin: TEdit;
     Label2: TLabel;
     Label3: TLabel;
+    lValue: TLabel;
     mUsage: TMemo;
     mRanges: TMemo;
     seTimer1: TFloatSpinEdit;
@@ -52,6 +55,7 @@ type
     procedure Button3Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
     procedure bSaveClick(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
     procedure cbChemSelect(Sender: TObject);
     procedure cbValueSelect(Sender: TObject);
     procedure eRMaxChange(Sender: TObject);
@@ -72,18 +76,19 @@ type
     { public declarations }
     ipcon: TIPConnection;
     ColorBricklet: TBrickletColor;
+    procedure StartMeasurement;
   end;
 
 var
-  Form1: TForm1;
+  fPhotometer: TfPhotometer;
 
 implementation
 
 {$R *.lfm}
 
-{ TForm1 }
+{ TfPhotometer }
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TfPhotometer.FormCreate(Sender: TObject);
 begin
   ipcon := TIPConnection.Create;
   ColorBricklet := TBrickletColor.Create(UID, ipcon);
@@ -92,7 +97,7 @@ begin
   ColorBricklet.SetConfig(60,154);
 end;
 
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TfPhotometer.Button1Click(Sender: TObject);
 var
   sl: TStringList;
   r: word;
@@ -109,16 +114,19 @@ begin
   sl.Free;
 end;
 
-procedure TForm1.Button2Click(Sender: TObject);
+procedure TfPhotometer.Button2Click(Sender: TObject);
 begin
   FTimer1:=round(seTimer1.Value*60);
-  lTimer1.Caption:=IntToStr(trunc(FTimer1/60))+':'+IntToStr(round(frac(FTimer1/60)*10));
+  lTimer1.Caption:=IntToStr(trunc(FTimer1/60))+':'+Format('%.*d',[2,round(frac(FTimer1/60)*60)]);
   Timer1.Enabled:=True;
 end;
 
-procedure TForm1.Button3Click(Sender: TObject);
+procedure TfPhotometer.Button3Click(Sender: TObject);
 begin
-  ColorBricklet.GetColor(FOffsR,FOffsG,FOffsB,FOffsC);
+  try
+    ColorBricklet.GetColor(FOffsR,FOffsG,FOffsB,FOffsC);
+  except
+  end;
   case cbColor.Text of
   'rot':eRMax.Text:=IntToStr(FOffsR);
   'grün':eRMax.Text:=IntToStr(FOffsG);
@@ -127,9 +135,12 @@ begin
   end;
 end;
 
-procedure TForm1.Button4Click(Sender: TObject);
+procedure TfPhotometer.Button4Click(Sender: TObject);
 begin
-  ColorBricklet.GetColor(FOffsR,FOffsG,FOffsB,FOffsC);
+  try
+    ColorBricklet.GetColor(FOffsR,FOffsG,FOffsB,FOffsC);
+  except
+  end;
   case cbColor.Text of
   'rot':eRMin.Text:=IntToStr(FOffsR);
   'grün':eRMin.Text:=IntToStr(FOffsG);
@@ -138,7 +149,7 @@ begin
   end;
 end;
 
-procedure TForm1.bSaveClick(Sender: TObject);
+procedure TfPhotometer.bSaveClick(Sender: TObject);
 var
   ini: TIniFile;
   ss: TStringStream;
@@ -155,11 +166,17 @@ begin
   ss := TStringStream.Create(mRanges.Text);
   ini.WriteBinaryStream('Ranges','Text',ss);
   ss.Free;
+  ini.WriteFloat('Time','Timer',seTimer1.Value);
   ini.UpdateFile;
   ini.Free;
 end;
 
-procedure TForm1.cbChemSelect(Sender: TObject);
+procedure TfPhotometer.Button5Click(Sender: TObject);
+begin
+  StartMeasurement;
+end;
+
+procedure TfPhotometer.cbChemSelect(Sender: TObject);
 var
   ini: TIniFile;
   ss: TStringStream;
@@ -178,10 +195,11 @@ begin
   ini.ReadBinaryStream('Ranges','Text',ss);
   mRanges.Text:=ss.DataString;
   ss.Free;
+  seTimer1.Value := ini.ReadFloat('Time','Timer',seTimer1.Value);
   ini.Free;
 end;
 
-procedure TForm1.cbValueSelect(Sender: TObject);
+procedure TfPhotometer.cbValueSelect(Sender: TObject);
 var
   Info: TSearchRec;
   tmp: String;
@@ -210,34 +228,36 @@ begin
     end;
 end;
 
-procedure TForm1.eRMaxChange(Sender: TObject);
+procedure TfPhotometer.eRMaxChange(Sender: TObject);
 begin
   tbR.Max:=StrToIntDef(eRMax.Text,65535);
 end;
 
-procedure TForm1.eRMinChange(Sender: TObject);
+procedure TfPhotometer.eRMinChange(Sender: TObject);
 begin
   tbR.Min:=StrToIntDef(eRMin.Text,0);
 end;
 
-procedure TForm1.eValueChange(Sender: TObject);
+procedure TfPhotometer.eValueChange(Sender: TObject);
 begin
   tbR.Position:=StrToIntDef(eValue.Text,0);
 end;
 
-procedure TForm1.FormDestroy(Sender: TObject);
+procedure TfPhotometer.FormDestroy(Sender: TObject);
 begin
   ColorBricklet.Free;
   ipcon.Free;
 end;
 
-procedure TForm1.Timer1Timer(Sender: TObject);
+procedure TfPhotometer.Timer1Timer(Sender: TObject);
 begin
   dec(FTimer1);
-  lTimer1.Caption:=IntToStr(trunc(FTimer1/60))+':'+IntToStr(round(frac(FTimer1/60)*60));
+  lTimer1.Caption:=IntToStr(trunc(FTimer1/60))+':'+Format('%.*d',[2,round(frac(FTimer1/60)*60)]);
+  if FTimer1<0 then
+    StartMeasurement;
 end;
 
-procedure TForm1.TimerRefTimer(Sender: TObject);
+procedure TfPhotometer.TimerRefTimer(Sender: TObject);
 var
   r: word;
   g: word;
@@ -257,6 +277,59 @@ begin
   'blau':tbR.Position:=b;
   'alles':tbR.Position:=c;
   end;
+end;
+
+procedure TfPhotometer.StartMeasurement;
+var
+  r: word;
+  g: word;
+  b: word;
+  c: word;
+  val: Word;
+  i: Integer;
+  aVal: LongInt;
+  aMin : LongInt = 0;
+  aMax : LongInt = 65535;
+  aValR: Extended;
+  aMaxR: Extended;
+  aMinR: Extended;
+  aRes: Extended;
+begin
+  try
+    ColorBricklet.GetColor(r,g,b,c);
+  except
+  end;
+  case cbColor.Text of
+  'rot':val:=r;
+  'grün':val:=g;
+  'blau':val:=b;
+  'alles':val:=c;
+  end;
+  for i := 0 to mRanges.Lines.Count-1 do
+    begin
+      aVal := StrToIntDef(copy(mRanges.Lines[i],pos('=',mRanges.Lines[i])+1,length(mRanges.Lines[i])),0);
+      aValR := StrToFloatDef(copy(mRanges.Lines[i],0,pos('=',mRanges.Lines[i])-1),0);
+      if (val>aVal) and (aVal>aMin) then
+        begin
+          aMin := aVal;
+          aMinR := aValR;
+        end;
+      if (val<aVal) and (aVal<aMax) then
+        begin
+          aMax := aVal;
+          aMaxR := aValR;
+        end;
+      if aMax=65535 then
+        lValue.Caption:='<'
+      else if aMin=0 then
+        lValue.Caption:='>'
+      else
+        begin
+          aRes := aMinR+((aMaxR-aMinR)/(aMax-aMin))*(val-aMin);
+          lValue.Caption:=FormatFloat('0.00',aRes);
+        end;
+    end;
+  Timer1.Enabled:=False;
 end;
 
 end.
