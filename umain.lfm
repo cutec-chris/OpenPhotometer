@@ -1,10 +1,10 @@
 object fPhotometer: TfPhotometer
   Left = 428
-  Height = 518
-  Top = 179
+  Height = 525
+  Top = 172
   Width = 659
   Caption = 'OpenPhotometer'
-  ClientHeight = 518
+  ClientHeight = 525
   ClientWidth = 659
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -31,7 +31,7 @@ object fPhotometer: TfPhotometer
   object Button1: TButton
     Left = 288
     Height = 25
-    Top = 475
+    Top = 482
     Width = 219
     Anchors = [akRight, akBottom]
     Caption = 'in ranges.txt speichern'
@@ -41,7 +41,7 @@ object fPhotometer: TfPhotometer
   object eRange: TEdit
     Left = 8
     Height = 25
-    Top = 475
+    Top = 482
     Width = 283
     Anchors = [akLeft, akRight, akBottom]
     TabOrder = 2
@@ -49,7 +49,7 @@ object fPhotometer: TfPhotometer
   object seTimer1: TFloatSpinEdit
     Left = 248
     Height = 25
-    Top = 307
+    Top = 314
     Width = 50
     Anchors = [akLeft, akBottom]
     Increment = 1
@@ -61,7 +61,7 @@ object fPhotometer: TfPhotometer
   object Label1: TLabel
     Left = 304
     Height = 15
-    Top = 311
+    Top = 318
     Width = 23
     Anchors = [akLeft, akBottom]
     Caption = 'min'
@@ -70,7 +70,7 @@ object fPhotometer: TfPhotometer
   object lTimer1: TLabel
     Left = 144
     Height = 29
-    Top = 307
+    Top = 314
     Width = 68
     Anchors = [akLeft, akBottom]
     Caption = '00:00'
@@ -81,7 +81,7 @@ object fPhotometer: TfPhotometer
   object Button2: TButton
     Left = 8
     Height = 48
-    Top = 307
+    Top = 314
     Width = 128
     Anchors = [akLeft, akBottom]
     Caption = 'Start'
@@ -245,20 +245,20 @@ object fPhotometer: TfPhotometer
   end
   object DividerBevel1: TDividerBevel
     Left = 8
-    Height = 15
-    Top = 80
+    Height = 36
+    Top = 66
     Width = 507
     Caption = 'Anweisung'
-    Anchors = [akLeft, akRight, akBottom]
+    Anchors = [akTop, akLeft, akRight, akBottom]
     Font.Style = [fsBold]
     ParentFont = False
   end
   object mUsage: TMemo
     Left = 8
-    Height = 165
-    Top = 104
+    Height = 186
+    Top = 90
     Width = 499
-    Anchors = [akLeft, akRight, akBottom]
+    Anchors = [akTop, akLeft, akRight, akBottom]
     Font.Height = -15
     ParentFont = False
     TabOrder = 17
@@ -266,7 +266,7 @@ object fPhotometer: TfPhotometer
   object DividerBevel2: TDividerBevel
     Left = 8
     Height = 15
-    Top = 283
+    Top = 290
     Width = 328
     Caption = 'Messung'
     Anchors = [akLeft, akRight, akBottom]
@@ -276,7 +276,7 @@ object fPhotometer: TfPhotometer
   object mRanges: TMemo
     Left = 8
     Height = 74
-    Top = 387
+    Top = 394
     Width = 499
     Anchors = [akLeft, akRight, akBottom]
     ParentFont = False
@@ -285,7 +285,7 @@ object fPhotometer: TfPhotometer
   object DividerBevel3: TDividerBevel
     Left = 8
     Height = 15
-    Top = 363
+    Top = 370
     Width = 507
     Caption = 'Abgleichwerte'
     Anchors = [akLeft, akRight, akBottom]
@@ -295,17 +295,17 @@ object fPhotometer: TfPhotometer
   object DividerBevel4: TDividerBevel
     Left = 345
     Height = 15
-    Top = 283
+    Top = 290
     Width = 170
     Caption = 'Wert'
-    Anchors = [akTop, akRight]
+    Anchors = [akRight, akBottom]
     Font.Style = [fsBold]
     ParentFont = False
   end
   object lValue: TLabel
     Left = 506
     Height = 1
-    Top = 343
+    Top = 350
     Width = 1
     Anchors = [akRight, akBottom]
     Font.Height = -32
@@ -315,9 +315,9 @@ object fPhotometer: TfPhotometer
   object bMeasure: TButton
     Left = 345
     Height = 37
-    Top = 307
+    Top = 314
     Width = 75
-    Anchors = [akTop, akRight]
+    Anchors = [akRight, akBottom]
     Caption = 'messen'
     Enabled = False
     OnClick = bMeasureClick
