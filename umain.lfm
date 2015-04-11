@@ -141,6 +141,7 @@ object fPhotometer: TfPhotometer
     Max = 65535
     Orientation = trVertical
     Position = 4004
+    Reversed = True
     ScalePos = trBottom
     Anchors = [akTop, akRight]
     TabOrder = 7
@@ -241,7 +242,6 @@ object fPhotometer: TfPhotometer
     MaxLength = 10
     OnChange = eValueChange
     TabOrder = 16
-    Text = ' '
   end
   object DividerBevel1: TDividerBevel
     Left = 8
@@ -312,17 +312,19 @@ object fPhotometer: TfPhotometer
     ParentColor = False
     ParentFont = False
   end
-  object Button5: TButton
+  object bMeasure: TButton
     Left = 345
     Height = 37
     Top = 307
     Width = 75
     Anchors = [akTop, akRight]
     Caption = 'messen'
-    OnClick = Button5Click
+    Enabled = False
+    OnClick = bMeasureClick
     TabOrder = 19
   end
   object TimerRef: TTimer
+    Enabled = False
     Interval = 300
     OnTimer = TimerRefTimer
     left = 536

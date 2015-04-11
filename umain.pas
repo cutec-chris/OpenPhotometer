@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, DividerBevel, Forms, Controls, Graphics, Dialogs,
-  ExtCtrls, StdCtrls, Spin, ComCtrls, IPConnection, BrickletColor, IniFiles;
+  ExtCtrls, StdCtrls, Spin, ComCtrls, IPConnection, BrickletColor, IniFiles,
+  Device;
 
 const
   HOST = 'localhost';
@@ -23,7 +24,7 @@ type
     Button3: TButton;
     Button4: TButton;
     bSave: TButton;
-    Button5: TButton;
+    bMeasure: TButton;
     cbValue: TComboBox;
     cbChem: TComboBox;
     cbColor: TComboBox;
@@ -55,7 +56,7 @@ type
     procedure Button3Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
     procedure bSaveClick(Sender: TObject);
-    procedure Button5Click(Sender: TObject);
+    procedure bMeasureClick(Sender: TObject);
     procedure cbChemSelect(Sender: TObject);
     procedure cbValueSelect(Sender: TObject);
     procedure eRMaxChange(Sender: TObject);
@@ -63,6 +64,11 @@ type
     procedure eValueChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure ipconEnumerate(sender: TIPConnection; const uid: string;
+      const connectedUid: string; const aposition: char;
+      const hardwareVersion: TVersionNumber;
+      const firmwareVersion: TVersionNumber; const deviceIdentifier: word;
+      const enumerationType: byte);
     procedure Timer1Timer(Sender: TObject);
     procedure TimerRefTimer(Sender: TObject);
   private
@@ -91,10 +97,10 @@ implementation
 procedure TfPhotometer.FormCreate(Sender: TObject);
 begin
   ipcon := TIPConnection.Create;
-  ColorBricklet := TBrickletColor.Create(UID, ipcon);
+  ipcon.OnEnumerate:=@ipconEnumerate;
+  ColorBricklet:=nil;
   ipcon.Connect(HOST, PORT);
-  ColorBricklet.LightOn;
-  ColorBricklet.SetConfig(60,154);
+  ipcon.Enumerate;
 end;
 
 procedure TfPhotometer.Button1Click(Sender: TObject);
@@ -109,7 +115,7 @@ begin
   if FileExistsUTF8('ranges.txt') then
     sl.LoadFromFile('ranges.txt');
   ColorBricklet.GetColor(r,g,b,c);
-  sl.Add(eRange.Text+':'+IntToStr(r)+','+IntToStr(g)+','+IntToStr(b)+','+IntToStr(c));
+  sl.Add(DateTimeToStr(Now())+':'+cbValue.Text+':'+cbChem.Text+':'+eRange.Text+':'+#9#9#9+IntToStr(r)+','+#9+IntToStr(g)+','+#9+IntToStr(b)+','+#9+IntToStr(c)+#9+',T:'+IntToStr(ColorBricklet.GetColorTemperature)+',I:'+IntToStr(ColorBricklet.GetIlluminance));
   sl.SaveToFile('ranges.txt');
   sl.Free;
 end;
@@ -171,7 +177,7 @@ begin
   ini.Free;
 end;
 
-procedure TfPhotometer.Button5Click(Sender: TObject);
+procedure TfPhotometer.bMeasureClick(Sender: TObject);
 begin
   StartMeasurement;
 end;
@@ -249,6 +255,21 @@ begin
   ipcon.Free;
 end;
 
+procedure TfPhotometer.ipconEnumerate(sender: TIPConnection; const uid: string;
+  const connectedUid: string; const aposition: char;
+  const hardwareVersion: TVersionNumber; const firmwareVersion: TVersionNumber;
+  const deviceIdentifier: word; const enumerationType: byte);
+begin
+  if deviceIdentifier=BRICKLET_COLOR_DEVICE_IDENTIFIER then
+    begin
+      ColorBricklet := TBrickletColor.Create(UID, ipcon);
+      ColorBricklet.LightOn;
+      ColorBricklet.SetConfig(60,154);
+      TimerRef.Enabled:=True;
+      bMeasure.Enabled:=True;
+    end;
+end;
+
 procedure TfPhotometer.Timer1Timer(Sender: TObject);
 begin
   dec(FTimer1);
@@ -264,11 +285,12 @@ var
   b: word;
   c: word;
 begin
-  if eValue.text<>'' then exit;
   if not ipcon.IsConnected then exit;
   try
-    ColorBricklet.GetColor(r,g,b,c);
+    if Assigned(ColorBricklet) then
+      ColorBricklet.GetColor(r,g,b,c);
   except
+    eValue.Text:='Wert';
   end;
   Panel1.Color:=RGBToColor(round((r/SpinEdit1.Value)),round((g/SpinEdit1.Value)),round((b/SpinEdit1.Value)));
   case cbColor.Text of
@@ -295,16 +317,21 @@ var
   aMinR: Extended;
   aRes: Extended;
 begin
-  try
-    ColorBricklet.GetColor(r,g,b,c);
-  except
-  end;
-  case cbColor.Text of
-  'rot':val:=r;
-  'grün':val:=g;
-  'blau':val:=b;
-  'alles':val:=c;
-  end;
+  if eValue.Text='' then
+    begin
+      try
+        if Assigned(ColorBricklet) then
+          ColorBricklet.GetColor(r,g,b,c);
+      except
+      end;
+      case cbColor.Text of
+      'rot':val:=r;
+      'grün':val:=g;
+      'blau':val:=b;
+      'alles':val:=c;
+      end;
+    end
+  else val := StrToInt(eValue.Text);
   for i := 0 to mRanges.Lines.Count-1 do
     begin
       aVal := StrToIntDef(copy(mRanges.Lines[i],pos('=',mRanges.Lines[i])+1,length(mRanges.Lines[i])),0);
