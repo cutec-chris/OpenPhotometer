@@ -19,6 +19,7 @@ type
   { TfPhotometer }
 
   TfPhotometer = class(TForm)
+    bSave1: TButton;
     Button1: TButton;
     Button2: TButton;
     Button3: TButton;
@@ -51,6 +52,7 @@ type
     TimerRef: TTimer;
     Timer1: TTimer;
     tbR: TTrackBar;
+    procedure bSave1Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button3Click(Sender: TObject);
@@ -101,6 +103,10 @@ begin
   ColorBricklet:=nil;
   ipcon.Connect(HOST, PORT);
   ipcon.Enumerate;
+  FOffsR:=0;
+  FOffsG:=0;
+  FOffsB:=0;
+  FOffsC:=0;
 end;
 
 procedure TfPhotometer.Button1Click(Sender: TObject);
@@ -116,6 +122,34 @@ begin
     sl.LoadFromFile('ranges.txt');
   ColorBricklet.GetColor(r,g,b,c);
   sl.Add(DateTimeToStr(Now())+':'+cbValue.Text+':'+cbChem.Text+':'+eRange.Text+':'+#9#9#9+IntToStr(r)+','+#9+IntToStr(g)+','+#9+IntToStr(b)+','+#9+IntToStr(c)+#9+',T:'+IntToStr(ColorBricklet.GetColorTemperature)+',I:'+IntToStr(ColorBricklet.GetIlluminance));
+  sl.SaveToFile('ranges.txt');
+  sl.Free;
+end;
+
+procedure TfPhotometer.bSave1Click(Sender: TObject);
+var
+  r: word;
+  g: word;
+  b: word;
+  c: word;
+  sl: TStringList;
+begin
+  if not ipcon.IsConnected then exit;
+  try
+    if Assigned(ColorBricklet) then
+      ColorBricklet.GetColor(r,g,b,c);
+  except
+    eValue.Text:='Wert';
+  end;
+  FOffsR:=r;
+  FOffsG:=g;
+  FOffsB:=b;
+  FOffsC:=c;
+  sl := TStringList.Create;
+  if FileExistsUTF8('ranges.txt') then
+    sl.LoadFromFile('ranges.txt');
+  ColorBricklet.GetColor(r,g,b,c);
+  sl.Add(DateTimeToStr(Now())+':*** Nullen ***:'+#9#9#9+IntToStr(r)+','+#9+IntToStr(g)+','+#9+IntToStr(b)+','+#9+IntToStr(c)+#9+',T:'+IntToStr(ColorBricklet.GetColorTemperature)+',I:'+IntToStr(ColorBricklet.GetIlluminance));
   sl.SaveToFile('ranges.txt');
   sl.Free;
 end;
@@ -325,10 +359,10 @@ begin
       except
       end;
       case cbColor.Text of
-      'rot':val:=r;
-      'grün':val:=g;
-      'blau':val:=b;
-      'alles':val:=c;
+      'rot':val:=r-FOffsR;
+      'grün':val:=g-FOffsG;
+      'blau':val:=b-FOffsB;
+      'alles':val:=c-FOffsC;
       end;
     end
   else val := StrToInt(eValue.Text);

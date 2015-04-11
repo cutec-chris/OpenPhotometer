@@ -92,7 +92,7 @@ object fPhotometer: TfPhotometer
     Left = 8
     Height = 27
     Top = 24
-    Width = 240
+    Width = 144
     ItemHeight = 0
     Items.Strings = (
       'PH'
@@ -116,7 +116,7 @@ object fPhotometer: TfPhotometer
     ParentColor = False
   end
   object Label3: TLabel
-    Left = 264
+    Left = 160
     Height = 15
     Top = 8
     Width = 50
@@ -124,10 +124,10 @@ object fPhotometer: TfPhotometer
     ParentColor = False
   end
   object cbChem: TComboBox
-    Left = 264
+    Left = 160
     Height = 27
     Top = 24
-    Width = 284
+    Width = 260
     Anchors = [akTop, akLeft, akRight]
     ItemHeight = 0
     OnSelect = cbChemSelect
@@ -224,7 +224,7 @@ object fPhotometer: TfPhotometer
     Text = 'eMax'
   end
   object bSave: TButton
-    Left = 556
+    Left = 424
     Height = 25
     Top = 24
     Width = 96
@@ -322,6 +322,16 @@ object fPhotometer: TfPhotometer
     Enabled = False
     OnClick = bMeasureClick
     TabOrder = 19
+  end
+  object bSave1: TButton
+    Left = 528
+    Height = 25
+    Top = 24
+    Width = 124
+    Anchors = [akTop, akRight]
+    Caption = 'nullen'
+    OnClick = bSave1Click
+    TabOrder = 20
   end
   object TimerRef: TTimer
     Enabled = False
