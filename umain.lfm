@@ -1,67 +1,48 @@
 object fPhotometer: TfPhotometer
   Left = 428
-  Height = 525
+  Height = 550
   Top = 172
-  Width = 659
+  Width = 701
   Caption = 'OpenPhotometer'
-  ClientHeight = 525
-  ClientWidth = 659
+  ClientHeight = 550
+  ClientWidth = 701
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   LCLVersion = '1.5'
-  object Panel1: TPanel
-    Left = 532
-    Height = 104
-    Top = 64
-    Width = 120
-    Anchors = [akTop, akRight]
-    ClientHeight = 104
-    ClientWidth = 120
-    TabOrder = 0
-    object SpinEdit1: TSpinEdit
-      Left = 67
-      Height = 25
-      Top = 2
-      Width = 50
-      MaxValue = 255
-      TabOrder = 0
-      Value = 100
-    end
-  end
   object Button1: TButton
-    Left = 288
+    Left = 330
     Height = 25
-    Top = 482
+    Top = 507
     Width = 219
     Anchors = [akRight, akBottom]
     Caption = 'in ranges.txt speichern'
     OnClick = Button1Click
-    TabOrder = 1
+    TabOrder = 0
   end
   object eRange: TEdit
     Left = 8
     Height = 25
-    Top = 482
-    Width = 283
+    Top = 507
+    Width = 325
     Anchors = [akLeft, akRight, akBottom]
-    TabOrder = 2
+    TabOrder = 1
   end
   object seTimer1: TFloatSpinEdit
     Left = 248
     Height = 25
-    Top = 314
+    Top = 339
     Width = 50
     Anchors = [akLeft, akBottom]
     Increment = 1
     MaxValue = 100
     MinValue = 0
-    TabOrder = 3
+    TabOrder = 2
     Value = 5
   end
   object Label1: TLabel
     Left = 304
     Height = 15
-    Top = 318
+    Top = 343
     Width = 23
     Anchors = [akLeft, akBottom]
     Caption = 'min'
@@ -70,7 +51,7 @@ object fPhotometer: TfPhotometer
   object lTimer1: TLabel
     Left = 144
     Height = 29
-    Top = 314
+    Top = 339
     Width = 68
     Anchors = [akLeft, akBottom]
     Caption = '00:00'
@@ -81,12 +62,12 @@ object fPhotometer: TfPhotometer
   object Button2: TButton
     Left = 8
     Height = 48
-    Top = 314
+    Top = 339
     Width = 128
     Anchors = [akLeft, akBottom]
     Caption = 'Start'
     OnClick = Button2Click
-    TabOrder = 4
+    TabOrder = 3
   end
   object cbValue: TComboBox
     Left = 8
@@ -105,7 +86,7 @@ object fPhotometer: TfPhotometer
       'CU'
     )
     OnSelect = cbValueSelect
-    TabOrder = 5
+    TabOrder = 4
   end
   object Label2: TLabel
     Left = 8
@@ -127,71 +108,50 @@ object fPhotometer: TfPhotometer
     Left = 160
     Height = 27
     Top = 24
-    Width = 260
+    Width = 302
     Anchors = [akTop, akLeft, akRight]
     ItemHeight = 0
     OnSelect = cbChemSelect
-    TabOrder = 6
+    TabOrder = 5
   end
   object tbR: TTrackBar
-    Left = 532
-    Height = 240
-    Top = 240
+    Left = 574
+    Height = 369
+    Top = 136
     Width = 64
     Max = 65535
     Orientation = trVertical
     Position = 4004
     Reversed = True
     ScalePos = trBottom
-    Anchors = [akTop, akRight]
-    TabOrder = 7
-  end
-  object eRMax: TEdit
-    Left = 532
-    Height = 25
-    Top = 208
-    Width = 64
-    Anchors = [akTop, akRight]
-    MaxLength = 10
-    OnChange = eRMaxChange
-    TabOrder = 8
-    Text = ' '
+    Anchors = [akTop, akRight, akBottom]
+    TabOrder = 6
   end
   object eRMin: TEdit
-    Left = 532
+    Left = 574
     Height = 25
-    Top = 485
+    Top = 510
     Width = 64
-    Anchors = [akTop, akRight]
+    Anchors = [akRight, akBottom]
     MaxLength = 10
     OnChange = eRMinChange
-    TabOrder = 9
+    TabOrder = 7
     Text = ' '
   end
-  object Button3: TButton
-    Left = 596
-    Height = 25
-    Top = 208
-    Width = 56
-    Anchors = [akTop, akRight]
-    Caption = '<<'
-    OnClick = Button3Click
-    TabOrder = 10
-  end
   object Button4: TButton
-    Left = 596
+    Left = 638
     Height = 25
-    Top = 485
+    Top = 510
     Width = 56
-    Anchors = [akTop, akRight]
+    Anchors = [akRight, akBottom]
     Caption = '<<'
     OnClick = Button4Click
-    TabOrder = 11
+    TabOrder = 8
   end
   object cbColor: TComboBox
-    Left = 532
+    Left = 570
     Height = 27
-    Top = 176
+    Top = 72
     Width = 120
     Anchors = [akTop, akRight]
     ItemHeight = 0
@@ -202,52 +162,44 @@ object fPhotometer: TfPhotometer
       'blau'
       'alles'
     )
-    TabOrder = 12
+    OnSelect = cbColorSelect
+    TabOrder = 9
     Text = 'grün'
   end
   object eMin: TEdit
-    Left = 596
+    Left = 638
     Height = 25
-    Top = 461
+    Top = 486
     Width = 56
-    Anchors = [akTop, akRight]
-    TabOrder = 13
+    Anchors = [akRight, akBottom]
+    TabOrder = 10
     Text = 'eMin'
   end
-  object eMax: TEdit
-    Left = 596
-    Height = 25
-    Top = 232
-    Width = 56
-    Anchors = [akTop, akRight]
-    TabOrder = 14
-    Text = 'eMax'
-  end
   object bSave: TButton
-    Left = 424
+    Left = 466
     Height = 25
     Top = 24
     Width = 96
     Anchors = [akTop, akRight]
     Caption = 'Speichern'
     OnClick = bSaveClick
-    TabOrder = 15
+    TabOrder = 11
   end
   object eValue: TEdit
-    Left = 596
+    Left = 638
     Height = 25
-    Top = 344
+    Top = 296
     Width = 56
     Anchors = [akTop, akRight]
     MaxLength = 10
     OnChange = eValueChange
-    TabOrder = 16
+    TabOrder = 12
   end
   object DividerBevel1: TDividerBevel
     Left = 8
-    Height = 36
+    Height = 61
     Top = 66
-    Width = 507
+    Width = 549
     Caption = 'Anweisung'
     Anchors = [akTop, akLeft, akRight, akBottom]
     Font.Style = [fsBold]
@@ -255,19 +207,19 @@ object fPhotometer: TfPhotometer
   end
   object mUsage: TMemo
     Left = 8
-    Height = 186
+    Height = 211
     Top = 90
-    Width = 499
+    Width = 541
     Anchors = [akTop, akLeft, akRight, akBottom]
     Font.Height = -15
     ParentFont = False
-    TabOrder = 17
+    TabOrder = 13
   end
   object DividerBevel2: TDividerBevel
     Left = 8
     Height = 15
-    Top = 290
-    Width = 328
+    Top = 315
+    Width = 370
     Caption = 'Messung'
     Anchors = [akLeft, akRight, akBottom]
     Font.Style = [fsBold]
@@ -276,26 +228,26 @@ object fPhotometer: TfPhotometer
   object mRanges: TMemo
     Left = 8
     Height = 74
-    Top = 394
-    Width = 499
+    Top = 419
+    Width = 541
     Anchors = [akLeft, akRight, akBottom]
     ParentFont = False
-    TabOrder = 18
+    TabOrder = 14
   end
   object DividerBevel3: TDividerBevel
     Left = 8
     Height = 15
-    Top = 370
-    Width = 507
+    Top = 395
+    Width = 549
     Caption = 'Abgleichwerte'
     Anchors = [akLeft, akRight, akBottom]
     Font.Style = [fsBold]
     ParentFont = False
   end
   object DividerBevel4: TDividerBevel
-    Left = 345
+    Left = 387
     Height = 15
-    Top = 290
+    Top = 315
     Width = 170
     Caption = 'Wert'
     Anchors = [akRight, akBottom]
@@ -303,9 +255,9 @@ object fPhotometer: TfPhotometer
     ParentFont = False
   end
   object lValue: TLabel
-    Left = 506
+    Left = 548
     Height = 1
-    Top = 350
+    Top = 375
     Width = 1
     Anchors = [akRight, akBottom]
     Font.Height = -32
@@ -313,25 +265,45 @@ object fPhotometer: TfPhotometer
     ParentFont = False
   end
   object bMeasure: TButton
-    Left = 345
+    Left = 387
     Height = 37
-    Top = 314
+    Top = 339
     Width = 75
     Anchors = [akRight, akBottom]
     Caption = 'messen'
     Enabled = False
     OnClick = bMeasureClick
-    TabOrder = 19
+    TabOrder = 15
   end
   object bSave1: TButton
-    Left = 528
+    Left = 570
     Height = 25
     Top = 24
     Width = 124
     Anchors = [akTop, akRight]
     Caption = 'nullen'
     OnClick = bSave1Click
-    TabOrder = 20
+    TabOrder = 16
+  end
+  object eMax: TEdit
+    Left = 632
+    Height = 25
+    Top = 136
+    Width = 56
+    Anchors = [akTop, akRight]
+    TabOrder = 17
+    Text = 'eMax'
+  end
+  object eRMax: TEdit
+    Left = 570
+    Height = 25
+    Top = 104
+    Width = 64
+    Anchors = [akTop, akRight]
+    MaxLength = 10
+    OnChange = eRMaxChange
+    TabOrder = 18
+    Text = ' '
   end
   object TimerRef: TTimer
     Enabled = False

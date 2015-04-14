@@ -12,7 +12,6 @@ uses
 const
   HOST = 'localhost';
   PORT = 4223;
-  UID = 'oPf'; { Change to your UID }
 
 type
 
@@ -22,7 +21,6 @@ type
     bSave1: TButton;
     Button1: TButton;
     Button2: TButton;
-    Button3: TButton;
     Button4: TButton;
     bSave: TButton;
     bMeasure: TButton;
@@ -33,8 +31,8 @@ type
     DividerBevel2: TDividerBevel;
     DividerBevel3: TDividerBevel;
     DividerBevel4: TDividerBevel;
-    eRange: TEdit;
     eMax: TEdit;
+    eRange: TEdit;
     eMin: TEdit;
     eRMax: TEdit;
     eValue: TEdit;
@@ -47,19 +45,17 @@ type
     seTimer1: TFloatSpinEdit;
     Label1: TLabel;
     lTimer1: TLabel;
-    Panel1: TPanel;
-    SpinEdit1: TSpinEdit;
     TimerRef: TTimer;
     Timer1: TTimer;
     tbR: TTrackBar;
     procedure bSave1Click(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
-    procedure Button3Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
     procedure bSaveClick(Sender: TObject);
     procedure bMeasureClick(Sender: TObject);
     procedure cbChemSelect(Sender: TObject);
+    procedure cbColorSelect(Sender: TObject);
     procedure cbValueSelect(Sender: TObject);
     procedure eRMaxChange(Sender: TObject);
     procedure eRMinChange(Sender: TObject);
@@ -103,10 +99,10 @@ begin
   ColorBricklet:=nil;
   ipcon.Connect(HOST, PORT);
   ipcon.Enumerate;
-  FOffsR:=0;
-  FOffsG:=0;
-  FOffsB:=0;
-  FOffsC:=0;
+  FOffsR:=65535;
+  FOffsG:=65535;
+  FOffsB:=65535;
+  FOffsC:=65535;
 end;
 
 procedure TfPhotometer.Button1Click(Sender: TObject);
@@ -145,10 +141,15 @@ begin
   FOffsG:=g;
   FOffsB:=b;
   FOffsC:=c;
+  case cbColor.Text of
+  'rot':tbR.Max:=FOffsR;
+  'grün':tbR.Max:=FOffsG;
+  'blau':tbR.Max:=FOffsB;
+  'alles':tbR.Max:=FOffsC;
+  end;
   sl := TStringList.Create;
   if FileExistsUTF8('ranges.txt') then
     sl.LoadFromFile('ranges.txt');
-  ColorBricklet.GetColor(r,g,b,c);
   sl.Add(DateTimeToStr(Now())+':*** Nullen ***:'+#9#9#9+IntToStr(r)+','+#9+IntToStr(g)+','+#9+IntToStr(b)+','+#9+IntToStr(c)+#9+',T:'+IntToStr(ColorBricklet.GetColorTemperature)+',I:'+IntToStr(ColorBricklet.GetIlluminance));
   sl.SaveToFile('ranges.txt');
   sl.Free;
@@ -159,20 +160,6 @@ begin
   FTimer1:=round(seTimer1.Value*60);
   lTimer1.Caption:=IntToStr(trunc(FTimer1/60))+':'+Format('%.*d',[2,round(frac(FTimer1/60)*60)]);
   Timer1.Enabled:=True;
-end;
-
-procedure TfPhotometer.Button3Click(Sender: TObject);
-begin
-  try
-    ColorBricklet.GetColor(FOffsR,FOffsG,FOffsB,FOffsC);
-  except
-  end;
-  case cbColor.Text of
-  'rot':eRMax.Text:=IntToStr(FOffsR);
-  'grün':eRMax.Text:=IntToStr(FOffsG);
-  'blau':eRMax.Text:=IntToStr(FOffsB);
-  'alles':eRMax.Text:=IntToStr(FOffsC);
-  end;
 end;
 
 procedure TfPhotometer.Button4Click(Sender: TObject);
@@ -237,6 +224,16 @@ begin
   ss.Free;
   seTimer1.Value := ini.ReadFloat('Time','Timer',seTimer1.Value);
   ini.Free;
+end;
+
+procedure TfPhotometer.cbColorSelect(Sender: TObject);
+begin
+  case cbColor.Text of
+  'rot':tbR.Max:=FOffsR;
+  'grün':tbR.Max:=FOffsG;
+  'blau':tbR.Max:=FOffsB;
+  'alles':tbR.Max:=FOffsC;
+  end;
 end;
 
 procedure TfPhotometer.cbValueSelect(Sender: TObject);
@@ -309,7 +306,10 @@ begin
   dec(FTimer1);
   lTimer1.Caption:=IntToStr(trunc(FTimer1/60))+':'+Format('%.*d',[2,round(frac(FTimer1/60)*60)]);
   if FTimer1<0 then
-    StartMeasurement;
+    begin
+      StartMeasurement;
+      Timer1.Enabled:=False;
+    end;
 end;
 
 procedure TfPhotometer.TimerRefTimer(Sender: TObject);
@@ -326,7 +326,6 @@ begin
   except
     eValue.Text:='Wert';
   end;
-  Panel1.Color:=RGBToColor(round((r/SpinEdit1.Value)),round((g/SpinEdit1.Value)),round((b/SpinEdit1.Value)));
   case cbColor.Text of
   'rot':tbR.Position:=r;
   'grün':tbR.Position:=g;
@@ -381,16 +380,15 @@ begin
           aMaxR := aValR;
         end;
       if aMax=65535 then
-        lValue.Caption:='<'
-      else if aMin=0 then
         lValue.Caption:='>'
+      else if aMin=0 then
+        lValue.Caption:='<'
       else
         begin
           aRes := aMinR+((aMaxR-aMinR)/(aMax-aMin))*(val-aMin);
           lValue.Caption:=FormatFloat('0.00',aRes);
         end;
     end;
-  Timer1.Enabled:=False;
 end;
 
 end.
