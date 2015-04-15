@@ -9,7 +9,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="1"/>
         <CursorPos Y="20"/>
-        <UsageCount Value="59"/>
+        <UsageCount Value="73"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
@@ -21,7 +21,7 @@
         <UnitName Value="uMain"/>
         <TopLine Value="314"/>
         <CursorPos Y="329"/>
-        <UsageCount Value="59"/>
+        <UsageCount Value="73"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit1>
@@ -32,7 +32,7 @@
         <EditorIndex Value="5"/>
         <TopLine Value="136"/>
         <CursorPos X="3" Y="133"/>
-        <UsageCount Value="59"/>
+        <UsageCount Value="73"/>
         <Loaded Value="True"/>
       </Unit2>
       <Unit3>
@@ -42,15 +42,16 @@
         <EditorIndex Value="2"/>
         <TopLine Value="471"/>
         <CursorPos X="3" Y="476"/>
-        <UsageCount Value="59"/>
+        <UsageCount Value="73"/>
         <Loaded Value="True"/>
       </Unit3>
       <Unit4>
         <Filename Value="ranges.txt"/>
         <IsVisibleTab Value="True"/>
-        <EditorIndex Value="3"/>
-        <CursorPos X="78" Y="29"/>
-        <UsageCount Value="29"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="114"/>
+        <CursorPos X="49" Y="144"/>
+        <UsageCount Value="36"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="None"/>
       </Unit4>
@@ -59,22 +60,22 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="84"/>
         <CursorPos X="14" Y="99"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
       </Unit5>
       <Unit6>
         <Filename Value="PH.Sera Koffer.ini"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="40" Y="12"/>
-        <UsageCount Value="17"/>
+        <UsageCount Value="16"/>
         <DefaultSyntaxHighlighter Value="Ini"/>
       </Unit6>
       <Unit7>
         <Filename Value="tinkerforge/BlockingQueue.pas"/>
         <UnitName Value="BlockingQueue"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="3"/>
         <TopLine Value="53"/>
         <CursorPos Y="68"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="18"/>
         <Loaded Value="True"/>
       </Unit7>
     </Units>
