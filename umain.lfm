@@ -1,321 +1,440 @@
 object fPhotometer: TfPhotometer
-  Left = 428
-  Height = 550
-  Top = 172
-  Width = 701
+  Left = 360
+  Height = 552
+  Top = 144
+  Width = 794
   Caption = 'OpenPhotometer'
-  ClientHeight = 550
-  ClientWidth = 701
+  ClientHeight = 552
+  ClientWidth = 794
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   LCLVersion = '1.5'
-  object Button1: TButton
-    Left = 330
-    Height = 25
-    Top = 507
-    Width = 219
-    Anchors = [akRight, akBottom]
-    Caption = 'in ranges.txt speichern'
-    OnClick = Button1Click
+  object pcMain: TPageControl
+    Left = 0
+    Height = 552
+    Top = 0
+    Width = 541
+    ActivePage = tsNull
+    Align = alClient
+    TabIndex = 0
     TabOrder = 0
+    object tsNull: TTabSheet
+      Caption = 'Abgleich'
+      ClientHeight = 519
+      ClientWidth = 535
+      object bNull: TButton
+        Left = 16
+        Height = 49
+        Top = 456
+        Width = 504
+        Anchors = [akLeft, akRight, akBottom]
+        Caption = '>> Weiter'
+        OnClick = bNullClick
+        TabOrder = 0
+      end
+      object Label5: TLabel
+        Left = 8
+        Height = 38
+        Top = 8
+        Width = 519
+        Align = alTop
+        BorderSpacing.Around = 8
+        Caption = 'Entnehmen Sie 5ml Beckenwasser für eine Abgleichsmessung'#10'und setzten Sie es in einer Küvette ein'
+        Color = clInfoText
+        Font.Color = clInfoBk
+        Font.Height = -16
+        ParentColor = False
+        ParentFont = False
+        Transparent = False
+        WordWrap = True
+      end
+      object Image1: TImage
+        Left = 96
+        Height = 289
+        Top = 96
+        Width = 340
+      end
+    end
+    object tsMeasurement: TTabSheet
+      Caption = 'Messung'
+      ClientHeight = 519
+      ClientWidth = 535
+      object seTimer1: TFloatSpinEdit
+        Left = 144
+        Height = 25
+        Top = 440
+        Width = 50
+        Anchors = [akLeft, akBottom]
+        Increment = 1
+        MaxValue = 100
+        MinValue = 0
+        TabOrder = 0
+        Value = 5
+      end
+      object Label1: TLabel
+        Left = 200
+        Height = 15
+        Top = 444
+        Width = 23
+        Anchors = [akLeft, akBottom]
+        Caption = 'min'
+        ParentColor = False
+      end
+      object lTimer1: TLabel
+        Left = 144
+        Height = 29
+        Top = 410
+        Width = 68
+        Anchors = [akLeft, akBottom]
+        Caption = '00:00'
+        Font.Height = -24
+        ParentColor = False
+        ParentFont = False
+      end
+      object Button2: TButton
+        Left = 8
+        Height = 48
+        Top = 410
+        Width = 128
+        Anchors = [akLeft, akBottom]
+        Caption = 'Start'
+        OnClick = Button2Click
+        TabOrder = 1
+      end
+      object cbValue: TComboBox
+        Left = 8
+        Height = 27
+        Top = 24
+        Width = 176
+        ItemHeight = 0
+        Items.Strings = (
+          'PH'
+          'KH'
+          'CA'
+          'PO4'
+          'NO3'
+          'NO2'
+          'NH3,4'
+          'CU'
+        )
+        OnSelect = cbValueSelect
+        TabOrder = 2
+      end
+      object Label2: TLabel
+        Left = 8
+        Height = 15
+        Top = 8
+        Width = 56
+        Caption = 'Messwert'
+        ParentColor = False
+      end
+      object Label3: TLabel
+        Left = 198
+        Height = 15
+        Top = 8
+        Width = 50
+        Caption = 'Reagenz'
+        ParentColor = False
+      end
+      object cbChem: TComboBox
+        Left = 198
+        Height = 27
+        Top = 24
+        Width = 320
+        Anchors = [akTop, akLeft, akRight]
+        ItemHeight = 0
+        OnSelect = cbChemSelect
+        TabOrder = 3
+      end
+      object DividerBevel1: TDividerBevel
+        Left = 8
+        Height = 24
+        Top = 66
+        Width = 510
+        Caption = 'Anweisung'
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object mUsage: TMemo
+        Left = 8
+        Height = 264
+        Top = 90
+        Width = 510
+        Anchors = [akTop, akLeft, akRight, akBottom]
+        Font.Height = -15
+        ParentFont = False
+        TabOrder = 4
+      end
+      object DividerBevel2: TDividerBevel
+        Left = 8
+        Height = 15
+        Top = 386
+        Width = 333
+        Caption = 'Reaktionszeit'
+        Anchors = [akLeft, akRight, akBottom]
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object DividerBevel4: TDividerBevel
+        Left = 348
+        Height = 15
+        Top = 386
+        Width = 170
+        Caption = 'Messung'
+        Anchors = [akRight, akBottom]
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object lValue: TLabel
+        Left = 450
+        Height = 38
+        Top = 409
+        Width = 68
+        Anchors = [akRight, akBottom]
+        Caption = 'NaN'
+        Font.Height = -32
+        ParentColor = False
+        ParentFont = False
+      end
+      object bMeasure: TButton
+        Left = 348
+        Height = 37
+        Top = 410
+        Width = 75
+        Anchors = [akRight, akBottom]
+        Caption = 'messen'
+        Enabled = False
+        OnClick = bMeasureClick
+        TabOrder = 5
+      end
+    end
+    object tsSettings: TTabSheet
+      Caption = 'Einstellungen'
+      ClientHeight = 519
+      ClientWidth = 535
+      object tbR: TTrackBar
+        Left = 20
+        Height = 321
+        Top = 160
+        Width = 64
+        Max = 65535
+        Orientation = trVertical
+        Position = 4004
+        Reversed = True
+        ScalePos = trBottom
+        Anchors = [akTop, akLeft, akBottom]
+        TabOrder = 0
+      end
+      object eRMin: TEdit
+        Left = 20
+        Height = 25
+        Top = 484
+        Width = 64
+        Anchors = [akTop, akLeft, akBottom]
+        MaxLength = 10
+        OnChange = eRMinChange
+        TabOrder = 1
+        Text = ' '
+      end
+      object Button4: TButton
+        Left = 84
+        Height = 25
+        Top = 484
+        Width = 56
+        Anchors = [akTop, akLeft, akBottom]
+        Caption = '<<'
+        OnClick = Button4Click
+        TabOrder = 2
+      end
+      object cbColor: TComboBox
+        Left = 20
+        Height = 27
+        Top = 96
+        Width = 120
+        Anchors = [akTop, akLeft, akBottom]
+        ItemHeight = 0
+        ItemIndex = 1
+        Items.Strings = (
+          'rot'
+          'grün'
+          'blau'
+          'alles'
+        )
+        OnSelect = cbColorSelect
+        TabOrder = 3
+        Text = 'grün'
+      end
+      object eMin: TEdit
+        Left = 84
+        Height = 25
+        Top = 456
+        Width = 56
+        Anchors = [akTop, akLeft, akBottom]
+        TabOrder = 4
+        Text = 'eMin'
+      end
+      object eValue: TEdit
+        Left = 84
+        Height = 25
+        Top = 312
+        Width = 56
+        Anchors = [akTop, akLeft, akBottom]
+        MaxLength = 10
+        OnChange = eValueChange
+        TabOrder = 5
+      end
+      object eMax: TEdit
+        Left = 84
+        Height = 25
+        Top = 160
+        Width = 56
+        Anchors = [akTop, akLeft, akBottom]
+        TabOrder = 6
+        Text = 'eMax'
+      end
+      object eRMax: TEdit
+        Left = 20
+        Height = 25
+        Top = 128
+        Width = 64
+        Anchors = [akTop, akLeft, akBottom]
+        MaxLength = 10
+        OnChange = eRMaxChange
+        TabOrder = 7
+        Text = ' '
+      end
+      object DividerBevel3: TDividerBevel
+        Left = 152
+        Height = 15
+        Top = 96
+        Width = 365
+        Caption = 'Abgleichwerte'
+        Anchors = [akLeft, akRight, akBottom]
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object mRanges: TMemo
+        Left = 152
+        Height = 192
+        Top = 136
+        Width = 365
+        Anchors = [akLeft, akRight, akBottom]
+        ParentFont = False
+        TabOrder = 8
+      end
+      object bSave: TButton
+        Left = 344
+        Height = 45
+        Top = 352
+        Width = 173
+        Anchors = [akTop, akRight]
+        Caption = 'Speichern'
+        OnClick = bSaveClick
+        TabOrder = 9
+      end
+      object Button1: TButton
+        Left = 328
+        Height = 25
+        Top = 484
+        Width = 205
+        Anchors = [akRight, akBottom]
+        Caption = 'in ranges.txt speichern'
+        OnClick = Button1Click
+        TabOrder = 10
+      end
+      object eRange: TEdit
+        Left = 152
+        Height = 25
+        Top = 484
+        Width = 165
+        Anchors = [akLeft, akRight, akBottom]
+        TabOrder = 11
+      end
+      object DividerBevel5: TDividerBevel
+        Left = 152
+        Height = 15
+        Top = 452
+        Width = 365
+        Caption = 'aktuelle Werte in ranges.txt speichern'
+        Anchors = [akLeft, akRight, akBottom]
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Label4: TLabel
+        Left = 8
+        Height = 38
+        Top = 8
+        Width = 519
+        Align = alTop
+        BorderSpacing.Around = 8
+        Caption = 'Die Einstellungen beziehen sich auf den gewählten Test und Reagenz im Tab "Messung"'
+        Color = clInfoText
+        Font.Color = clInfoBk
+        Font.Height = -16
+        ParentColor = False
+        ParentFont = False
+        Transparent = False
+        WordWrap = True
+      end
+    end
   end
-  object eRange: TEdit
-    Left = 8
-    Height = 25
-    Top = 507
-    Width = 325
-    Anchors = [akLeft, akRight, akBottom]
-    TabOrder = 1
-  end
-  object seTimer1: TFloatSpinEdit
-    Left = 248
-    Height = 25
-    Top = 339
-    Width = 50
-    Anchors = [akLeft, akBottom]
-    Increment = 1
-    MaxValue = 100
-    MinValue = 0
-    TabOrder = 2
-    Value = 5
-  end
-  object Label1: TLabel
-    Left = 304
-    Height = 15
-    Top = 343
-    Width = 23
-    Anchors = [akLeft, akBottom]
-    Caption = 'min'
-    ParentColor = False
-  end
-  object lTimer1: TLabel
-    Left = 144
-    Height = 29
-    Top = 339
-    Width = 68
-    Anchors = [akLeft, akBottom]
-    Caption = '00:00'
-    Font.Height = -24
-    ParentColor = False
-    ParentFont = False
-  end
-  object Button2: TButton
-    Left = 8
-    Height = 48
-    Top = 339
-    Width = 128
-    Anchors = [akLeft, akBottom]
-    Caption = 'Start'
-    OnClick = Button2Click
-    TabOrder = 3
-  end
-  object cbValue: TComboBox
-    Left = 8
-    Height = 27
-    Top = 24
-    Width = 144
-    ItemHeight = 0
-    Items.Strings = (
-      'PH'
-      'KH'
-      'CA'
-      'PO4'
-      'NO3'
-      'NO2'
-      'NH3,4'
-      'CU'
+  object Chart1: TChart
+    Left = 541
+    Height = 552
+    Top = 0
+    Width = 253
+    AxisList = <    
+      item
+        Marks.Range.Max = 65535
+        Marks.Range.UseMax = True
+        Minors = <>
+        Range.Max = 35000
+        Range.UseMax = True
+        Range.UseMin = True
+        Title.LabelFont.Orientation = 900
+      end    
+      item
+        Alignment = calBottom
+        Marks.Style = smsNone
+        Minors = <>
+      end>
+    Foot.Brush.Color = clBtnFace
+    Foot.Font.Color = clBlue
+    Title.Brush.Color = clBtnFace
+    Title.Font.Color = clBlue
+    Title.Text.Strings = (
+      'TAChart'
     )
-    OnSelect = cbValueSelect
-    TabOrder = 4
-  end
-  object Label2: TLabel
-    Left = 8
-    Height = 15
-    Top = 8
-    Width = 56
-    Caption = 'Messwert'
+    Align = alRight
     ParentColor = False
-  end
-  object Label3: TLabel
-    Left = 160
-    Height = 15
-    Top = 8
-    Width = 50
-    Caption = 'Reagenz'
-    ParentColor = False
-  end
-  object cbChem: TComboBox
-    Left = 160
-    Height = 27
-    Top = 24
-    Width = 302
-    Anchors = [akTop, akLeft, akRight]
-    ItemHeight = 0
-    OnSelect = cbChemSelect
-    TabOrder = 5
-  end
-  object tbR: TTrackBar
-    Left = 574
-    Height = 369
-    Top = 136
-    Width = 64
-    Max = 65535
-    Orientation = trVertical
-    Position = 4004
-    Reversed = True
-    ScalePos = trBottom
-    Anchors = [akTop, akRight, akBottom]
-    TabOrder = 6
-  end
-  object eRMin: TEdit
-    Left = 574
-    Height = 25
-    Top = 510
-    Width = 64
-    Anchors = [akRight, akBottom]
-    MaxLength = 10
-    OnChange = eRMinChange
-    TabOrder = 7
-    Text = ' '
-  end
-  object Button4: TButton
-    Left = 638
-    Height = 25
-    Top = 510
-    Width = 56
-    Anchors = [akRight, akBottom]
-    Caption = '<<'
-    OnClick = Button4Click
-    TabOrder = 8
-  end
-  object cbColor: TComboBox
-    Left = 570
-    Height = 27
-    Top = 72
-    Width = 120
-    Anchors = [akTop, akRight]
-    ItemHeight = 0
-    ItemIndex = 1
-    Items.Strings = (
-      'rot'
-      'grün'
-      'blau'
-      'alles'
-    )
-    OnSelect = cbColorSelect
-    TabOrder = 9
-    Text = 'grün'
-  end
-  object eMin: TEdit
-    Left = 638
-    Height = 25
-    Top = 486
-    Width = 56
-    Anchors = [akRight, akBottom]
-    TabOrder = 10
-    Text = 'eMin'
-  end
-  object bSave: TButton
-    Left = 466
-    Height = 25
-    Top = 24
-    Width = 96
-    Anchors = [akTop, akRight]
-    Caption = 'Speichern'
-    OnClick = bSaveClick
-    TabOrder = 11
-  end
-  object eValue: TEdit
-    Left = 638
-    Height = 25
-    Top = 296
-    Width = 56
-    Anchors = [akTop, akRight]
-    MaxLength = 10
-    OnChange = eValueChange
-    TabOrder = 12
-  end
-  object DividerBevel1: TDividerBevel
-    Left = 8
-    Height = 61
-    Top = 66
-    Width = 549
-    Caption = 'Anweisung'
-    Anchors = [akTop, akLeft, akRight, akBottom]
-    Font.Style = [fsBold]
-    ParentFont = False
-  end
-  object mUsage: TMemo
-    Left = 8
-    Height = 211
-    Top = 90
-    Width = 541
-    Anchors = [akTop, akLeft, akRight, akBottom]
-    Font.Height = -15
-    ParentFont = False
-    TabOrder = 13
-  end
-  object DividerBevel2: TDividerBevel
-    Left = 8
-    Height = 15
-    Top = 315
-    Width = 370
-    Caption = 'Messung'
-    Anchors = [akLeft, akRight, akBottom]
-    Font.Style = [fsBold]
-    ParentFont = False
-  end
-  object mRanges: TMemo
-    Left = 8
-    Height = 74
-    Top = 419
-    Width = 541
-    Anchors = [akLeft, akRight, akBottom]
-    ParentFont = False
-    TabOrder = 14
-  end
-  object DividerBevel3: TDividerBevel
-    Left = 8
-    Height = 15
-    Top = 395
-    Width = 549
-    Caption = 'Abgleichwerte'
-    Anchors = [akLeft, akRight, akBottom]
-    Font.Style = [fsBold]
-    ParentFont = False
-  end
-  object DividerBevel4: TDividerBevel
-    Left = 387
-    Height = 15
-    Top = 315
-    Width = 170
-    Caption = 'Wert'
-    Anchors = [akRight, akBottom]
-    Font.Style = [fsBold]
-    ParentFont = False
-  end
-  object lValue: TLabel
-    Left = 548
-    Height = 1
-    Top = 375
-    Width = 1
-    Anchors = [akRight, akBottom]
-    Font.Height = -32
-    ParentColor = False
-    ParentFont = False
-  end
-  object bMeasure: TButton
-    Left = 387
-    Height = 37
-    Top = 339
-    Width = 75
-    Anchors = [akRight, akBottom]
-    Caption = 'messen'
-    Enabled = False
-    OnClick = bMeasureClick
-    TabOrder = 15
-  end
-  object bSave1: TButton
-    Left = 570
-    Height = 25
-    Top = 24
-    Width = 124
-    Anchors = [akTop, akRight]
-    Caption = 'nullen'
-    OnClick = bSave1Click
-    TabOrder = 16
-  end
-  object eMax: TEdit
-    Left = 632
-    Height = 25
-    Top = 136
-    Width = 56
-    Anchors = [akTop, akRight]
-    TabOrder = 17
-    Text = 'eMax'
-  end
-  object eRMax: TEdit
-    Left = 570
-    Height = 25
-    Top = 104
-    Width = 64
-    Anchors = [akTop, akRight]
-    MaxLength = 10
-    OnChange = eRMaxChange
-    TabOrder = 18
-    Text = ' '
+    object Chart1BarSeries1: TBarSeries
+      BarBrush.Color = clRed
+      Depth = 5
+      Source = ListChartSource1
+    end
   end
   object TimerRef: TTimer
     Enabled = False
     Interval = 300
     OnTimer = TimerRefTimer
-    left = 536
+    left = 376
     top = 128
   end
   object Timer1: TTimer
     Enabled = False
     OnTimer = Timer1Timer
-    left = 216
-    top = 321
+    left = 448
+    top = 128
+  end
+  object ListChartSource1: TListChartSource
+    DataPoints.Strings = (
+      '1|0|$0000FF|rot'
+      '2|0|$07FF00|grün'
+      '3|0|$FF0500|blau'
+      '4|0|$FFFFFF|alles'
+    )
+    left = 376
+    top = 184
   end
 end

@@ -5,9 +5,9 @@ unit uMain;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, DividerBevel, Forms, Controls, Graphics, Dialogs,
-  ExtCtrls, StdCtrls, Spin, ComCtrls, IPConnection, BrickletColor, IniFiles,
-  Device;
+  Classes, SysUtils, FileUtil, DividerBevel, TAGraph, TASeries, TASources,
+  Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls, Spin, ComCtrls,
+  IPConnection, BrickletColor, IniFiles, Device;
 
 const
   HOST = 'localhost';
@@ -18,37 +18,48 @@ type
   { TfPhotometer }
 
   TfPhotometer = class(TForm)
-    bSave1: TButton;
+    bNull: TButton;
+    bSave: TButton;
     Button1: TButton;
     Button2: TButton;
-    Button4: TButton;
-    bSave: TButton;
     bMeasure: TButton;
+    Button4: TButton;
+    cbColor: TComboBox;
     cbValue: TComboBox;
     cbChem: TComboBox;
-    cbColor: TComboBox;
+    Chart1: TChart;
+    Chart1BarSeries1: TBarSeries;
     DividerBevel1: TDividerBevel;
     DividerBevel2: TDividerBevel;
     DividerBevel3: TDividerBevel;
     DividerBevel4: TDividerBevel;
+    DividerBevel5: TDividerBevel;
     eMax: TEdit;
-    eRange: TEdit;
     eMin: TEdit;
+    eRange: TEdit;
     eRMax: TEdit;
-    eValue: TEdit;
     eRMin: TEdit;
+    eValue: TEdit;
+    Image1: TImage;
     Label2: TLabel;
     Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    ListChartSource1: TListChartSource;
     lValue: TLabel;
-    mUsage: TMemo;
     mRanges: TMemo;
+    mUsage: TMemo;
+    pcMain: TPageControl;
     seTimer1: TFloatSpinEdit;
     Label1: TLabel;
     lTimer1: TLabel;
+    tbR: TTrackBar;
+    tsSettings: TTabSheet;
+    tsNull: TTabSheet;
+    tsMeasurement: TTabSheet;
     TimerRef: TTimer;
     Timer1: TTimer;
-    tbR: TTrackBar;
-    procedure bSave1Click(Sender: TObject);
+    procedure bNullClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Button4Click(Sender: TObject);
@@ -76,10 +87,12 @@ type
     FOffsG : word;
     FOffsB : word;
     FOffsC : word;
+    FOffsM : word;
   public
     { public declarations }
     ipcon: TIPConnection;
     ColorBricklet: TBrickletColor;
+    BrickletID : string;
     procedure StartMeasurement;
   end;
 
@@ -103,6 +116,7 @@ begin
   FOffsG:=65535;
   FOffsB:=65535;
   FOffsC:=65535;
+  pcMain.ActivePage:=tsNull;
 end;
 
 procedure TfPhotometer.Button1Click(Sender: TObject);
@@ -117,42 +131,53 @@ begin
   if FileExistsUTF8('ranges.txt') then
     sl.LoadFromFile('ranges.txt');
   ColorBricklet.GetColor(r,g,b,c);
-  sl.Add(DateTimeToStr(Now())+':'+cbValue.Text+':'+cbChem.Text+':'+eRange.Text+':'+#9#9#9+IntToStr(r)+','+#9+IntToStr(g)+','+#9+IntToStr(b)+','+#9+IntToStr(c)+#9+',T:'+IntToStr(ColorBricklet.GetColorTemperature)+',I:'+IntToStr(ColorBricklet.GetIlluminance));
+  sl.Add(DateTimeToStr(Now())+':'+BrickletID+':'+cbValue.Text+':'+cbChem.Text+':'+eRange.Text+':'+#9#9#9+IntToStr(r)+','+#9+IntToStr(g)+','+#9+IntToStr(b)+','+#9+IntToStr(c)+#9+',T:'+IntToStr(ColorBricklet.GetColorTemperature)+',I:'+IntToStr(ColorBricklet.GetIlluminance)+',A:'+IntToStr(FOffsM));
   sl.SaveToFile('ranges.txt');
   sl.Free;
 end;
 
-procedure TfPhotometer.bSave1Click(Sender: TObject);
+procedure TfPhotometer.bNullClick(Sender: TObject);
 var
   r: word;
   g: word;
   b: word;
   c: word;
   sl: TStringList;
+  ini: TIniFile;
 begin
   if not ipcon.IsConnected then exit;
+  if not Assigned(ColorBricklet) then exit;
   try
     if Assigned(ColorBricklet) then
       ColorBricklet.GetColor(r,g,b,c);
   except
     eValue.Text:='Wert';
+    exit;
   end;
+  FOffsM := r;
+  if g>FOffsM then FOffsM := g;
+  if b>FOffsM then FOffsM := b;
+  FOffsM:=FOffsM+5000;
   FOffsR:=r;
   FOffsG:=g;
   FOffsB:=b;
   FOffsC:=c;
-  case cbColor.Text of
-  'rot':tbR.Max:=FOffsR;
-  'grün':tbR.Max:=FOffsG;
-  'blau':tbR.Max:=FOffsB;
-  'alles':tbR.Max:=FOffsC;
-  end;
   sl := TStringList.Create;
   if FileExistsUTF8('ranges.txt') then
     sl.LoadFromFile('ranges.txt');
-  sl.Add(DateTimeToStr(Now())+':*** Nullen ***:'+#9#9#9+IntToStr(r)+','+#9+IntToStr(g)+','+#9+IntToStr(b)+','+#9+IntToStr(c)+#9+',T:'+IntToStr(ColorBricklet.GetColorTemperature)+',I:'+IntToStr(ColorBricklet.GetIlluminance));
+  sl.Add(DateTimeToStr(Now())+':'+BrickletID+':*** Nullen O ***:'+#9#9#9+IntToStr(r)+','+#9+IntToStr(g)+','+#9+IntToStr(b)+','+#9+IntToStr(c)+#9+',T:'+IntToStr(ColorBricklet.GetColorTemperature)+',I:'+IntToStr(ColorBricklet.GetIlluminance)+',A:'+IntToStr(FOffsM));
+  sl.Add(DateTimeToStr(Now())+':'+BrickletID+':*** Nullen F ***:'+#9#9#9+IntToStr(FOffsR)+','+#9+IntToStr(FOffsG)+','+#9+IntToStr(FOffsB)+','+#9+IntToStr(FOffsC)+#9+',A:'+IntToStr(FOffsM));
   sl.SaveToFile('ranges.txt');
   sl.Free;
+  ini := TIniFile.Create('adjust_'+BrickletID+'.ini');
+  ini.WriteInteger('Offs','M',FOffsM);
+  ini.WriteInteger('Offs','R',FOffsR);
+  ini.WriteInteger('Offs','G',FOffsG);
+  ini.WriteInteger('Offs','B',FOffsB);
+  ini.WriteInteger('Offs','C',FOffsC);
+  ini.UpdateFile;
+  ini.Free;
+  pcMain.ActivePage:=tsMeasurement;
 end;
 
 procedure TfPhotometer.Button2Click(Sender: TObject);
@@ -290,6 +315,8 @@ procedure TfPhotometer.ipconEnumerate(sender: TIPConnection; const uid: string;
   const connectedUid: string; const aposition: char;
   const hardwareVersion: TVersionNumber; const firmwareVersion: TVersionNumber;
   const deviceIdentifier: word; const enumerationType: byte);
+var
+  ini: TIniFile;
 begin
   if deviceIdentifier=BRICKLET_COLOR_DEVICE_IDENTIFIER then
     begin
@@ -298,6 +325,19 @@ begin
       ColorBricklet.SetConfig(60,154);
       TimerRef.Enabled:=True;
       bMeasure.Enabled:=True;
+      pcMain.ActivePage:=tsNull;
+      BrickletID := uid;
+      if FileExistsUTF8('adjust_'+BrickletID+'.ini') then
+        begin
+          ini := TIniFile.Create('adjust_'+BrickletID+'.ini');
+          FOffsM := ini.ReadInteger('Offs','M',FOffsM);
+          FOffsR := ini.ReadInteger('Offs','R',FOffsR);
+          FOffsG := ini.ReadInteger('Offs','G',FOffsG);
+          FOffsB := ini.ReadInteger('Offs','B',FOffsB);
+          FOffsC := ini.ReadInteger('Offs','C',FOffsC);
+          ini.Free;
+          pcMain.ActivePage:=tsMeasurement;
+        end;
     end;
 end;
 
@@ -318,6 +358,10 @@ var
   g: word;
   b: word;
   c: word;
+  r1: Integer;
+  g1: Integer;
+  b1: Integer;
+  c1: Integer;
 begin
   if not ipcon.IsConnected then exit;
   try
@@ -326,6 +370,20 @@ begin
   except
     eValue.Text:='Wert';
   end;
+
+  r1 := FOffsM-r;
+  g1 := FOffsM-g;
+  b1 := FOffsM-b;
+  c1 := FOffsM-c;
+  if r1>0 then  r := r1 else r := 0;
+  if g1>0 then  g := g1 else g := 0;
+  if b1>0 then  b := b1 else b := 0;
+  if c1>0 then  c := c1 else c := 0;
+
+  ListChartSource1.SetYValue(0,r);
+  ListChartSource1.SetYValue(1,g);
+  ListChartSource1.SetYValue(2,b);
+  ListChartSource1.SetYValue(3,c);
   case cbColor.Text of
   'rot':tbR.Position:=r;
   'grün':tbR.Position:=g;
@@ -349,6 +407,11 @@ var
   aMaxR: Extended;
   aMinR: Extended;
   aRes: Extended;
+  r1: Integer;
+  g1: Integer;
+  b1: Integer;
+  c1: Integer;
+  aNewValue: String;
 begin
   if eValue.Text='' then
     begin
@@ -357,11 +420,19 @@ begin
           ColorBricklet.GetColor(r,g,b,c);
       except
       end;
+      r1 := FOffsM-r;
+      g1 := FOffsM-g;
+      b1 := FOffsM-b;
+      c1 := FOffsM-c;
+      if r1>0 then  r := r1 else r := 0;
+      if g1>0 then  g := g1 else g := 0;
+      if b1>0 then  b := b1 else b := 0;
+      if c1>0 then  c := c1 else c := 0;
       case cbColor.Text of
-      'rot':val:=r-FOffsR;
-      'grün':val:=g-FOffsG;
-      'blau':val:=b-FOffsB;
-      'alles':val:=c-FOffsC;
+      'rot':val:=r1;
+      'grün':val:=g1;
+      'blau':val:=b1;
+      'alles':val:=c1;
       end;
     end
   else val := StrToInt(eValue.Text);
@@ -379,15 +450,31 @@ begin
           aMax := aVal;
           aMaxR := aValR;
         end;
-      if aMax=65535 then
-        lValue.Caption:='>'
-      else if aMin=0 then
-        lValue.Caption:='<'
-      else
+    end;
+  if aMax=65535 then
+    begin
+      lValue.Caption:='>';
+      aNewValue := InputBox('Wert >','Der Wert ist größer als bisherige, bitte messen Sie den Wert mit Vergleichkarte nach','');
+      if aNewValue<>'' then
         begin
-          aRes := aMinR+((aMaxR-aMinR)/(aMax-aMin))*(val-aMin);
-          lValue.Caption:=FormatFloat('0.00',aRes);
+          mRanges.Append(aNewValue+'='+IntToStr(Val));
+          bSave.Click;
         end;
+    end
+  else if aMin=0 then
+    begin
+      lValue.Caption:='<';
+      aNewValue := InputBox('Wert <','Der Wert ist kleiner als bisherige, bitte messen Sie den Wert mit Vergleichkarte nach','');
+      if aNewValue<>'' then
+        begin
+          mRanges.Append(aNewValue+'='+IntToStr(Val));
+          bSave.Click;
+        end;
+    end
+  else
+    begin
+      aRes := aMinR+((aMaxR-aMinR)/(aMax-aMin))*(val-aMin);
+      lValue.Caption:=FormatFloat('0.00',aRes);
     end;
 end;
 

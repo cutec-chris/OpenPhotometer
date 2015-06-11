@@ -1,0 +1,12 @@
+Source: OpenPhotometer
+Package: OpenPhotometer
+Version: VERSION
+Section: office
+Priority: optional
+Maintainer: Christian Ulrich <info@free-erp.de>
+Architecture: ARCH
+Depends:  libc6
+Installed-Size: DEBSIZE
+Description: Aquarium Photometer Software
+ .
+
